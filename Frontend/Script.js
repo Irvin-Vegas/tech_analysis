@@ -1,81 +1,63 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const chartContainer = document.getElementById("chart");
+// script.js
+const output = document.getElementById('output');
+const pairSelector = document.getElementById('pairSelector');
 
-  const chart = LightweightCharts.createChart(chartContainer, {
-    width: chartContainer.clientWidth,
-    height: chartContainer.clientHeight,
-    layout: {
-      background: { color: "#0d1117" },
-      textColor: "#d1d4dc"
-    },
-    grid: {
-      vertLines: { color: "#30363d" },
-      horzLines: { color: "#30363d" }
-    },
-    priceScale: { borderColor: "#485c7b" },
-    timeScale: { borderColor: "#485c7b" },
-  });
+async function getPrice(pair) {
+  const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${pair}`);
+  const data = await res.json();
+  return parseFloat(data.price);
+}
 
-  const candleSeries = chart.addCandlestickSeries({
-    upColor: "#26a69a",
-    downColor: "#ef5350",
-    wickUpColor: "#26a69a",
-    wickDownColor: "#ef5350",
-    borderVisible: false,
-  });
+function calculateRSI(prices) {
+  let gains = 0, losses = 0;
+  for (let i = 1; i < prices.length; i++) {
+    const change = prices[i] - prices[i - 1];
+    if (change > 0) gains += change;
+    else losses -= change;
+  }
+  const rs = gains / losses;
+  return 100 - (100 / (1 + rs));
+}
 
-  const smaSeries = chart.addLineSeries({
-    color: "#fbc02d",
-    lineWidth: 2,
-  });
+function predictPrice(prices) {
+  const n = prices.length;
+  let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+  for (let i = 0; i < n; i++) {
+    sumX += i;
+    sumY += prices[i];
+    sumXY += i * prices[i];
+    sumXX += i * i;
+  }
+  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+  const intercept = (sumY - slope * sumX) / n;
+  return slope * n + intercept;
+}
 
-  let currentSymbol = "BTCUSDT";
-
-  async function fetchCandles(symbol = "BTCUSDT") {
-    try {
-      const res = await fetch(`https://api.bybit.com/v5/market/kline?category=linear&symbol=${symbol}&interval=60&limit=50`);
-      const data = await res.json();
-      const kline = data.result.list.reverse().map(i => ({
-        time: Math.floor(i[0] / 1000),
-        open: parseFloat(i[1]),
-        high: parseFloat(i[2]),
-        low: parseFloat(i[3]),
-        close: parseFloat(i[4]),
-      }));
-
-      candleSeries.setData(kline);
-
-      const sma = kline.map((d, i, arr) => {
-        if (i < 4) return null;
-        const avg = arr.slice(i - 4, i + 1).reduce((sum, c) => sum + c.close, 0) / 5;
-        return { time: d.time, value: avg };
-      }).filter(Boolean);
-
-      smaSeries.setData(sma);
-
-      checkAlerts(kline[kline.length - 1], sma[sma.length - 1]);
-    } catch (e) {
-      console.error("Error fetching candles", e);
-    }
+async function updateDashboard() {
+  const pair = pairSelector.value;
+  const prices = [];
+  for (let i = 0; i < 14; i++) {
+    const price = await getPrice(pair);
+    prices.push(price);
+    await new Promise(r => setTimeout(r, 500));
   }
 
-  function checkAlerts(latestCandle, latestSMA) {
-    if (!latestCandle || !latestSMA) return;
+  const rsi = calculateRSI(prices);
+  const prediction = predictPrice(prices);
+  const current = prices[prices.length - 1];
+  let alert = '';
 
-    if (latestCandle.close > latestSMA.value) {
-      alert(`ALERT: Price crossed above SMA!\nClose: ${latestCandle.close.toFixed(2)} > SMA: ${latestSMA.value.toFixed(2)}`);
-    } else if (latestCandle.close < latestSMA.value) {
-      alert(`ALERT: Price crossed below SMA!\nClose: ${latestCandle.close.toFixed(2)} < SMA: ${latestSMA.value.toFixed(2)}`);
-    }
-  }
+  if (rsi > 70) alert = 'Overbought! Possible sell signal';
+  else if (rsi < 30) alert = 'Oversold! Possible buy signal';
 
-  document.getElementById("pairSelector").addEventListener("change", (e) => {
-    currentSymbol = e.target.value;
-    fetchCandles(currentSymbol);
-  });
+  output.innerHTML = `
+    <p>Current Price: ${current.toFixed(2)}</p>
+    <p>RSI: ${rsi.toFixed(2)}</p>
+    <p>Next Price Prediction: ${prediction.toFixed(2)}</p>
+    <p style="color:orange">Signal: ${alert}</p>
+  `;
+}
 
-  fetchCandles(); // Initial fetch
-
-  // Update every 60 minutes
-  setInterval(() => fetchCandles(currentSymbol), 60 * 60 * 1000);
-});
+pairSelector.addEventListener('change', updateDashboard);
+updateDashboard();
+setInterval(updateDashboard, 60 * 60 * 1000);

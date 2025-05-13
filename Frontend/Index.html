@@ -1,21 +1,17 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Crypto Chart</title>
+  <title>Crypto Logic</title>
   <link rel="stylesheet" href="Design.css">
-  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
 </head>
 <body>
-  <div id="controls">
-    <select id="pairSelector">
-      <option value="BTCUSDT">BTC/USDT</option>
-      <option value="ETHUSDT">ETH/USDT</option>
-      <option value="SOLUSDT">SOL/USDT</option>
-    </select>
-  </div>
-  <div id="chart"></div>
+  <h1>Crypto Logic Dashboard</h1>
+  <select id="pairSelector">
+    <option value="BTCUSDT">BTC/USDT</option>
+    <option value="ETHUSDT">ETH/USDT</option>
+  </select>
+  <div id="output"></div>
   <script src="script.js"></script>
 </body>
 </html>
