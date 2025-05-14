@@ -1,17 +1,63 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Crypto Logic</title>
-  <link rel="stylesheet" href="Design.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crypto TA Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Crypto Logic Dashboard</h1>
-  <select id="pairSelector">
-    <option value="BTCUSDT">BTC/USDT</option>
-    <option value="ETHUSDT">ETH/USDT</option>
-  </select>
-  <div id="output"></div>
+  <<header>
+  <h1>Crypto TA Dashboard</h1>
+  <button id="modeToggle">Toggle Theme</button>
+</header>
+
+  <main>
+    <section class="price-section">
+      <h2>Price Prediction</h2>
+      <div class="selector">
+        <label for="timeframe">Timeframe:</label>
+        <select id="timeframe">
+          <option value="1D">1D</option>
+          <option value="4H">4H</option>
+          <option value="1H">1H</option>
+          <option value="15">15M</option>
+        </select>
+      </div>
+      <div class="box" id="prediction">Loading prediction...</div>
+    </section>
+
+    <section class="indicators">
+      <div class="indicator-box">
+        <div class="selector">
+          <label for="indicator1">Indicator 1:</label>
+          <select id="indicator1">
+            <option value="EMA">EMA</option>
+            <option value="RSI">RSI</option>
+            <option value="CROSS">Crossover</option>
+          </select>
+        </div>
+        <div class="box" id="result1">Loading...</div>
+      </div>
+
+      <div class="indicator-box">
+        <div class="selector">
+          <label for="indicator2">Indicator 2:</label>
+          <select id="indicator2">
+            <option value="EMA">EMA</option>
+            <option value="RSI">RSI</option>
+            <option value="CROSS">Crossover</option>
+          </select>
+        </div>
+        <div class="box" id="result2">Loading...</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Bybit API Data | Vanilla JS</p>
+  </footer>
+
   <script src="script.js"></script>
 </body>
 </html>

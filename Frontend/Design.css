@@ -1,27 +1,130 @@
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #0d1117;
-  font-family: sans-serif;
-  color: white;
+ .container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-#controls {
-  padding: 10px;
+h1 {
   text-align: center;
-  background-color: #161b22;
+  margin-bottom: 20px;
+}
+
+.analysis-box {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.analysis-box h2 {
+  margin-bottom: 10px;
+}
+
+.indicator-select {
+  margin-bottom: 10px;
+}
+
+.result-display {
+  padding: 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+#chart-container {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+#price-chart {
+  width: 100%;
+  height: 300px;
+}
+
+.timeframe-select {
+  margin-bottom: 10px;
+
+
+
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --box-bg: #f3f3f3;
+  --accent: #007bff;
+}
+
+body.dark {
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --box-bg: #1e1e1e;
+  --accent: #00bcd4;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background: var(--accent);
+  padding: 1rem;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+main {
+  padding: 1rem;
+}
+
+.box {
+  background-color: var(--box-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
+
+.selector {
+  margin-bottom: 0.5rem;
 }
 
 select {
-  padding: 5px;
-  font-size: 16px;
-  background-color: #21262d;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  padding: 0.4rem;
+  margin-left: 0.5rem;
 }
 
-#chart {
-  width: 100vw;
-  height: 85vh;
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  background: var(--box-bg);
+}
+
+button#modeToggle {
+  background: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+}
+
+.prediction-display {
+  padding: 12px;
+  margin-top: 12px;
+  background: #e3ffe3;
+  border: 1px solid #a8dba8;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #0a7a0a;
+  text-align: center;
 }
