@@ -1,4 +1,5 @@
-const symbol = "BTCUSDT";
+document.addEventListener("DOMContentLoaded", () => {
+  const symbol = "BTCUSDT";
 let timeframe = "1D";
 let indicator1 = "EMA";
 let indicator2 = "RSI";
@@ -121,3 +122,4 @@ function runIndicator(indicator, closes) {
 }
 
 fetchData();
+});
